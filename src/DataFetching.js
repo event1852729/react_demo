@@ -8,9 +8,14 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import PostAnn from './components/PostAnn';
 import Header from './components/Header';
+import PostPackage from './components/PostPackage';
+import YoutubeContainer from './components/YoutubeContainer';
+import getStore from './store';
 
+const store = getStore();
 
 const Wrapper = styled.div`
   width: 100%;
@@ -28,7 +33,6 @@ const Container = styled.div`
   top: 250 px;
   padding: 25px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
@@ -43,16 +47,20 @@ function Home() {
 function DataFetching() {
   return (
     <BrowserRouter basename="/official-site">
-      <Wrapper>
-        <Header />
-        <Container className="container mt-5">
-          <Switch>
-            <Route path="/PostAnn" component={PostAnn} />
-            <Route path="/" component={Home} />
-            <Redirect to="/" />
-          </Switch>
-        </Container>
-      </Wrapper>
+      <Provider store={store}>
+        <Wrapper>
+          <Header />
+          <Container className="container mt-5">
+            <Switch>
+              <Route path="/PostAnn" component={PostAnn} />
+              <Route path="/Package" component={PostPackage} />
+              <Route path="/Youtube" component={YoutubeContainer} />
+              <Redirect to="/" />
+            </Switch>
+          </Container>
+        </Wrapper>
+      </Provider>
+
     </BrowserRouter>
   );
 }

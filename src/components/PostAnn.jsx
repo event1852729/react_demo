@@ -5,7 +5,7 @@ import Posts from './Posts';
 import Pagination from './Pagination';
 
 const AnnTitle = styled.h1`
-
+font-weight:bold;
 `;
 function PostAnn() {
   const [posts, setPosts] = useState([]);
@@ -20,7 +20,6 @@ function PostAnn() {
       setPosts(res.data);
       setLoading(false);
     };
-
     fetchPosts();
   }, []);
 
@@ -32,7 +31,7 @@ function PostAnn() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
-      <AnnTitle className="text-primary mb-3">My Blog</AnnTitle>
+      <AnnTitle>公告資訊</AnnTitle>
       <Posts posts={currentPosts} loading={loading} />
       <Pagination
         postsPerPage={postsPerPage}

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import logo from '../static/logo.png';
 import Link from './Link';
 import hamburger from '../static/hamburger.png';
+import DrawerToggleButton from './DrawerToggleButton';
+import SideDrawer from './SideDrawer';
+import BackDrop from './BackDrop';
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -67,6 +70,23 @@ const HamburgerButton = styled.button`
     transition-timing-function: linear;
   }
 `;
+const SideDrawerWrapper = styled.div`
+height:100%;
+background:white;
+box-shadow:2px 0px 5px rgba(0,0,0,0.5);
+position: fixed;
+top : 0;
+left : 0;
+width : 70%;
+max-width: 400px;
+z-index: 200;
+  opacity: ${({ sideShowed }) => (sideShowed ? 1 : 0)};
+  left: ${({ sideShowed }) => (sideShowed ? 0 : '-100%')};
+  transition-duration: 0.3s;
+  transition-property: left, opacity;
+  transition-timing-function: ease-in-out;
+  z-index: 999;
+`;
 
 const MobileMenuWrapper = styled.div`
   display: none;
@@ -115,8 +135,21 @@ const links = [{
 }];
 function Header() {
   const [showMobileMenu, setMobileMenu] = useState(false);
+  const [showSideDrawer, setSideDrawer] = useState(false);
+  let sideDrawer;
+  let backDrop;
+  if (showSideDrawer) {
+    sideDrawer = <SideDrawer onClick={() => setSideDrawer(false)} />;
+    backDrop = <BackDrop onClick={() => setSideDrawer(false)} />;
+  }
+
   return (
     <HeaderWrapper>
+      <SideDrawerWrapper sideShowed={showSideDrawer}>
+        {sideDrawer}
+      </SideDrawerWrapper>
+      {backDrop}
+      <DrawerToggleButton onClick={() => setSideDrawer(true)} />
       <LogoLink to="/">
         <Logo src={logo} alt="logo" />
       </LogoLink>
@@ -143,7 +176,7 @@ function Header() {
         {links.map((link) => (
           <StyledLink
             dropdown={link.dropdown}
-            menuShowed={showMobileMenu}
+            menuShowed={showMobileMenu} 
             name={link.name}
             onClick={() => setMobileMenu(false)}
             key={`mobile-${link.path}`}
